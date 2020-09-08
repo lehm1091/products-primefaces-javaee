@@ -90,7 +90,7 @@ public class EditViewSuppliers implements Serializable {
     public void bontonGuardarSupplier() {
         if (service.saveSupplier(newSupplier) > 0) {
             suppliers = (ArrayList<Supplier>) service.findAllSuppliers();
-            FacesMessage msj = new FacesMessage("Se a agregado un supplier siiiuuuuuu!!");
+            FacesMessage msj = new FacesMessage("Guardado correctamente");
             FacesContext.getCurrentInstance().addMessage(null, msj);
             newSupplier = new Supplier();
         } else {
