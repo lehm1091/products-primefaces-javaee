@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>TODO supply a title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+        <style type="text/css">
+            .ui-row-editor .ui-row-editor-pencil {
+                margin-left:8px;
+            }
+        </style>
+
+        <ui:composition template="./template.xhtml">
+
+
+            <ui:define name="left">
+                 <h:form> 
+                    <h:panelGrid>
+
+                        <p:outputLabel value="Company Name"/>
+                        <p:inputText value="#{dtEditViewSuppliers.newSupplier.companyName}"/>
+
+                        <p:outputLabel value="Contac Name"/>
+                        <p:inputText value="#{dtEditViewSuppliers.newSupplier.contacName}"/>
+
+                        <p:outputLabel value="Address"/>
+                        <p:inputText value="#{dtEditViewSuppliers.newSupplier.address}"/>
+
+                        <p:outputLabel value="Phone"/>
+                        <p:inputText value="#{dtEditViewSuppliers.newSupplier.phone}"/>
+                        
+                        <p:commandButton value="Save new Supplier" action="#{dtEditViewSuppliers.bontonGuardarSupplier()}" update="form"/>
+                   
+                    </h:panelGrid>
+                   </h:form>
+            </ui:define>
+
+            <ui:define name="content"> 
+
+                <h:form id="form">
+
+                    <p:dataTable id="suppliers"  var="s" 
+                                 value="#{dtEditViewSuppliers.suppliers}"  
+                                 rowKey="#{s.supplierID}"
+                                 selection="#{dtEditViewSuppliers.selectedSupplier}"
+                                 editable="true" editMode="cell" 
+                                 widgetVar="cellSuppliers">
+
+                        <f:facet name="header">
+                            Suppliers
+                        </f:facet>
+
+                        <p:ajax event="cellEdit"  process="@this" listener="#{dtEditViewSuppliers.onCellEdit}" update="suppliers, form:msgs">
+                            <f:setPropertyActionListener value="#{s}" target="#{dtEditViewSuppliers.selectedSupplier}" />
+                        </p:ajax>
+
+                        <p:column headerText="Id">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{s.supplierID}" /></f:facet>
+                                <f:facet name="input"><p:inputText  disabled="true" value="#{s.supplierID}" style="width:96%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="CompanyName">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{s.companyName}" /></f:facet>
+                                <f:facet name="input"><p:inputText  value="#{s.companyName}" style="width:96%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="ContactName">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{s.contacName}" /></f:facet>
+                                <f:facet name="input"><p:inputText   value="#{s.contacName}" style="width:96%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Address">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{s.address}"/></f:facet>
+                                <f:facet name="input"><p:inputText   value="#{s.address}" style="width:96%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Phone">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{s.phone}"/></f:facet>
+                                <f:facet name="input"><p:inputText   value="#{s.phone}" style="width:96%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column style="width: 120px; text-align: center" headerText="delete">
+                            <p:commandButton update=":form" action="#{dtEditViewSuppliers.botonEliminar()}" value="Delete" title="Delete">
+                                <f:setPropertyActionListener value="#{s}" target="#{dtEditViewSuppliers.supplierToDelete}"/>
+                            </p:commandButton>
+                        </p:column>
+
+                        <p:column style="width: 120px; text-align: center" headerText="View Detail">
+                            <p:commandButton update=":form" action="#{dtEditViewCategories.viewDetails()}" value="View" title="Edit">
+                                <f:setPropertyActionListener value="#{s}" target="#{dtEditViewSuppliers.supplierToDelete}"/>
+                            </p:commandButton>
+                        </p:column>
+
+                    </p:dataTable>
+                    <p:messages id="msgs" showDetail="true"  closable="true"/>
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:commandButton value="Add new row" styleClass="ui-priority-primary" process="@this" update=":form:msgs"
+                                             action="#{dtEditViewSuppliers.onAddNew()}" oncomplete="PF('cellSuppliers').addRow();" />
+                        </div>
+                    </div>
+
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </h:body>
+
+</html>
