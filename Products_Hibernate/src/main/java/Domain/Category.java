@@ -28,9 +28,9 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author lehm
  */
-@Entity
-@Table(name = "categories", catalog = "products", schema = "")
 @XmlRootElement
+@Entity
+@Table(name = "categories", catalog = "northwindjunior", schema = "")
 @NamedQueries({
     @NamedQuery(name = "Category.findAll", query = "SELECT c FROM Category c")})
 public class Category implements Serializable {
@@ -50,6 +50,7 @@ public class Category implements Serializable {
     @Size(max = 16777215)
     @Column(name = "Descrition", length = 16777215)
     private String descrition;
+    @XmlTransient
     @OneToMany(mappedBy = "categoryID", fetch = FetchType.LAZY)
     private List<Product> productList;
 

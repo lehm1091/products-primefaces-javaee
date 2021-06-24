@@ -6,6 +6,8 @@
 package Service;
 
 import Domain.Product;
+import dto.ProductDTO;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -26,8 +28,12 @@ public class ServiceJAXRS {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Product> listarProdutcs() {
-        return service.findAllProducts();
+    public Response listarProdutcs() {
+        ArrayList<ProductDTO> lista = new ArrayList<>();
+        for (Product actual : service.findAllProducts()) {
+            lista.add(new ProductDTO(actual.getProductID(), actual.getProductName(), actual.getQuantityPerUnit(), actual.getUnitInstock(), actual.getUnitPrice()));
+        }
+        return Response.status(Response.Status.OK).entity(lista).build();
     }
 
     @GET
@@ -35,8 +41,7 @@ public class ServiceJAXRS {
     @Path("{id}")
     public Product findByID(@PathParam("id") int id) {
         return service.getProduct(id);
-        
-        
+
     }
 
     @POST
@@ -71,17 +76,16 @@ public class ServiceJAXRS {
             return Response.status(Status.INTERNAL_SERVER_ERROR).build();
         }
     }
-    
-    
+
     @DELETE
     @Path("{id}")
-    public Response eliminarProductById(@PathParam("id") int id){
-        try{
-            Product p=new Product();
+    public Response eliminarProductById(@PathParam("id") int id) {
+        try {
+            Product p = new Product();
             p.setProductID(id);
             service.deleteProduct(p);
             return Response.ok().build();
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace(System.out);
             return Response.status(404).build();
         }

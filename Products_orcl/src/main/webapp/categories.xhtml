@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>TODO supply a title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+        <style type="text/css">
+            .ui-row-editor .ui-row-editor-pencil {
+                margin-left:8px;
+            }
+        </style>
+
+            <ui:composition template="./template.xhtml">
+                <ui:define name="left">
+                    <h:form> 
+                    <h:panelGrid>
+
+                        <p:outputLabel value="CategoryName"/>
+                        <p:inputText value="#{dtEditViewCategories.newCategory.categoryName}"/>
+
+                        <p:outputLabel value="Description"/>
+                        <p:inputText value="#{dtEditViewCategories.newCategory.description}"/>
+                        
+                        <p:commandButton value="Save new Category" action="#{dtEditViewCategories.botonGuardarCategoria()}" update="form"/>
+                   
+                    </h:panelGrid>
+                   </h:form>
+                </ui:define>
+
+                <ui:define name="content">
+                    <h:form id="form">
+                    <p:dataTable id="categories"  var="c" 
+                                 value="#{dtEditViewCategories.categories}"  
+                                 rowKey="#{c.categoryId}"
+                                 selection="#{dtEditViewCategories.selectedCategory}"
+                                 editable="true" editMode="cell" 
+                                 widgetVar="cellCategories">
+                        <f:facet name="header">
+                            Categories
+                        </f:facet>
+
+                        <p:ajax event="cellEdit"  process="@this" listener="#{dtEditViewCategories.onCellEdit}" update="categories, form:msgs">
+                            <f:setPropertyActionListener value="#{c}" target="#{dtEditViewCategories.selectedCategory}" />
+                        </p:ajax>
+
+                        <p:column headerText="Id">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{c.categoryId}" /></f:facet>
+                                <f:facet name="input"><p:inputText  disabled="true" value="#{c.categoryId}" style="width:96%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column headerText="Name">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{c.categoryName}" /></f:facet>
+                                <f:facet name="input"><p:inputText  value="#{c.categoryName}" style="width:96%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column headerText="Description">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{c.description}" /></f:facet>
+                                <f:facet name="input"><p:inputText   value="#{c.description}" style="width:96%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+
+                        <p:column style="width: 120px; text-align: center" headerText="delete">
+                            <p:commandButton update=":form" action="#{dtEditViewCategories.botonEliminar()}" value="Delete" title="Delete">
+                                <f:setPropertyActionListener value="#{c}" target="#{dtEditViewCategories.categoryToDelete}"/>
+                            </p:commandButton>
+                        </p:column>
+                        
+                        <p:column style="width: 120px; text-align: center" headerText="View Products">
+                            <p:commandButton update=":form" action="#{dtEditViewCategories.botonVerProducts}" value="view" title="view products">
+                                
+                                <f:param name="id" value="#{c.categoryId}"/>
+                                   <f:param name="i" value="1" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                    <p:messages id="msgs" showDetail="true"  closable="true"/>
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:commandButton value="Add new row" styleClass="ui-priority-primary" process="@this" update=":form:msgs"
+                                             action="#{dtEditViewCategories.onAddNew}" oncomplete="PF('cellCategories').addRow();" />
+                        </div>
+                    </div>
+
+                    </h:form>
+                </ui:define>
+            </ui:composition>
+
+    </h:body>
+
+</html>

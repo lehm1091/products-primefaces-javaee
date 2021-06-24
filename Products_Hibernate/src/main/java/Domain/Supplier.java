@@ -27,9 +27,9 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author lehm
  */
-@Entity
-@Table(name = "suppliers", catalog = "products", schema = "")
 @XmlRootElement
+@Entity
+@Table(name = "suppliers", catalog = "northwindjunior", schema = "")
 @NamedQueries({
     @NamedQuery(name = "Supplier.findAll", query = "SELECT s FROM Supplier s")})
 public class Supplier implements Serializable {
@@ -49,12 +49,14 @@ public class Supplier implements Serializable {
     @Column(name = "CompanyName", nullable = false, length = 255)
     private String companyName;
     @Size(max = 255)
-    @Column(name = "ContacName", length = 255)
-    private String contacName;
+    @Column(name = "ContactName", length = 255)
+    private String contactName;
     // @Pattern(regexp="^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$", message="Invalid phone/fax format, should be as xxx-xxx-xxxx")//if the field contains phone or fax number consider using this annotation to enforce field validation
     @Size(max = 255)
     @Column(name = "Phone", length = 255)
     private String phone;
+
+    @XmlTransient
     @OneToMany(mappedBy = "supplierID", fetch = FetchType.LAZY)
     private List<Product> productList;
 
@@ -65,11 +67,9 @@ public class Supplier implements Serializable {
         this.supplierID = supplierID;
         this.address = address;
         this.companyName = companyName;
-        this.contacName = contacName;
+        this.contactName = contacName;
         this.phone = phone;
     }
-    
-    
 
     public Supplier(Integer supplierID) {
         this.supplierID = supplierID;
@@ -104,12 +104,12 @@ public class Supplier implements Serializable {
         this.companyName = companyName;
     }
 
-    public String getContacName() {
-        return contacName;
+    public String getContactName() {
+        return contactName;
     }
 
-    public void setContacName(String contacName) {
-        this.contacName = contacName;
+    public void setContactName(String contacName) {
+        this.contactName = contacName;
     }
 
     public String getPhone() {
@@ -153,5 +153,5 @@ public class Supplier implements Serializable {
     public String toString() {
         return "domainTest.Supplier[ supplierID=" + supplierID + " ]";
     }
-    
+
 }

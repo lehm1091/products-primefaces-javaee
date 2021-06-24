@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <h:head>
+        <title>TODO supply a title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+        <style type="text/css">
+            .ui-row-editor .ui-row-editor-pencil {
+                margin-left:8px;
+            }
+        </style>
+
+        <h:body>
+
+            <ui:composition template="./template.xhtml">
+                <ui:define name="left">
+                    <h:form id="formLeft"> 
+
+
+                        <h:panelGrid>
+
+   
+                                <p:outputLabel value="Product Name"/>
+                                <p:inputText value="#{dtEditView.newProduct.productName}"/>
+
+                                <p:outputLabel value="UnitPrice"/>
+                                <p:inputText value="#{dtEditView.newProduct.unitPrice}"/>
+
+                                <p:outputLabel value="QuentityPerUnit"/>
+                                <p:inputText value="#{dtEditView.newProduct.quantityPerUnit}"/>
+
+                                <p:outputLabel value="UnitStock"/>
+                                <p:inputText value="#{dtEditView.newProduct.unitInStock}"/>
+
+                                <p:outputLabel value="Category"/>
+                                <p:selectOneMenu required="true"   value="#{dtEditView.newProduct.categoryId}" style="width:100%" converter="CategoryConverter" >
+                                    <f:selectItems value="#{dtEditView.categories}" var="man" itemLabel="#{man.categoryName}" itemValue="#{man}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Supplier"/>
+                                <p:selectOneMenu required="true" value="#{dtEditView.newProduct.supplierId}" style="width:100%" converter="SupplierConverter">
+                                    <f:selectItems value="#{dtEditView.suppliers}" var="man" itemLabel="#{man.companyName}" itemValue="#{man}"/>
+                                </p:selectOneMenu>
+                                <p:commandButton value="Save" action="#{dtEditView.botonAgregarProducto}" update="form"  icon="pi pi-save"/>
+                       
+                        </h:panelGrid>
+                    </h:form>
+                </ui:define>
+
+                <ui:define name="content">
+                    <h:form id="form">
+
+                        <p:dataTable id="products"  var="p" 
+                                     value="#{dtEditView.lista}"  
+                                     rowKey="#{p.productId}"
+                                     selection="#{dtEditView.selectedProduct}"
+                                     editable="true" editMode="cell" 
+                                     widgetVar="cellProducts"
+                                     rows="10"
+                                     paginator="true"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                                     rowsPerPageTemplate="5,10,15"
+                                     emptyMessage="No items found with given criteria" 
+                                     filteredValue="#{dtEditView.filteredProducts}"
+
+
+                                     >
+
+                            <f:facet name="header">
+
+                                <h:outputText value="Data" />
+
+                            </f:facet>
+
+
+
+                            <p:column headerText="Id" sortBy="#{p.productId}">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{p.productId}" /></f:facet>
+                                    <f:facet name="input"><p:inputText  disabled="true" value="#{p.productId}" style="width:96%"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Product Name" sortBy="#{p.productName}">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{p.productName}" /></f:facet>
+                                    <f:facet name="input"><p:inputText value="#{p.productName}" style="width:96%"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Quantity" sortBy="#{p.quantityPerUnit}">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{p.quantityPerUnit}" /></f:facet>
+                                    <f:facet name="input"><p:inputText value="#{p.quantityPerUnit}" style="width:96%"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Category" sortBy="#{p.categoryId.categoryName}" filterBy="#{p.categoryId}" filterMatchMode="exact" filterValue="#{param.id}">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{p.categoryId.categoryName}" /></f:facet>
+                                    <f:facet name="input">
+                                        <p:selectOneMenu required="true"   value="#{p.categoryId}" style="width:100%" converter="CategoryConverter" >
+                                            <f:selectItems value="#{dtEditView.categories}" var="man" itemLabel="#{man.categoryName}" itemValue="#{man}" />
+                                        </p:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Supplier" sortBy="#{p.supplierId.companyName}">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{p.supplierId.companyName}"/></f:facet>
+                                    <f:facet name="input">
+                                        <p:selectOneMenu required="true" value="#{p.supplierId}" style="width:100%" converter="SupplierConverter">
+                                            <f:selectItems value="#{dtEditView.suppliers}" var="man" itemLabel="#{man.companyName}" itemValue="#{man}"/>
+                                        </p:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column style="width: 50px; text-align: center" headerText="Delete">
+                                <p:commandButton update=":form" action="#{dtEditView.botonEliminar()}" icon="pi pi-trash" title="Delete">
+                                    <f:setPropertyActionListener value="#{p}" target="#{dtEditView.deleteProduct}"/>
+                                </p:commandButton>
+                            </p:column>
+
+                            <p:column style="width: 50px; text-align: center" headerText="Edit">
+                                <p:commandButton id="editButtom" action="#{dtEditView.botonEditar()}"  update="formLeft"  icon="pi pi-pencil" title="Edit">
+                                    <f:setPropertyActionListener value="#{p}" target="#{dtEditView.selectedProduct}"/>
+                                    <f:param name="i" value="1" />
+                                </p:commandButton>
+                            </p:column>
+
+                        </p:dataTable>
+                        <p:messages id="msgs" showDetail="true"  closable="true"/>
+                        <div class="ui-g">
+                            <div class="ui-g-12">
+                                <p:commandButton title="Add new row" icon="pi pi-plus" process="@this" update=":form:msgs"
+                                                 action="#{dtEditView.onAddNew}" oncomplete="PF('cellProducts').addRow();" />
+                            </div>
+                        </div>
+
+                    </h:form>
+                </ui:define>
+            </ui:composition>
+        </h:body>
+
+    </h:body>
+
+</html>

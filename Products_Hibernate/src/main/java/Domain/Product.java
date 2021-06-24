@@ -22,14 +22,15 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author lehm
  */
-@Entity
-@Table(name = "products", catalog = "products", schema = "")
 @XmlRootElement
+@Entity
+@Table(name = "products", catalog = "northwindjunior", schema = "")
 @NamedQueries({
     @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p")})
 public class Product implements Serializable {
@@ -51,9 +52,11 @@ public class Product implements Serializable {
     private Integer unitInstock;
     @Column(name = "UnitPrice")
     private BigInteger unitPrice;
+ 
     @JoinColumn(name = "CategoryID", referencedColumnName = "CategoryID")
     @ManyToOne(fetch = FetchType.EAGER)
     private Category categoryID;
+
     @JoinColumn(name = "SupplierID", referencedColumnName = "SupplierID")
     @ManyToOne(fetch = FetchType.EAGER)
     private Supplier supplierID;

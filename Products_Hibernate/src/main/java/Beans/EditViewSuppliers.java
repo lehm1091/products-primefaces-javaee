@@ -12,7 +12,9 @@ import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
 import java.util.ArrayList;
 import Service.Service;
-
+import java.util.HashMap;
+import java.util.Map;
+import org.primefaces.PrimeFaces;
 
 @Named("dtEditViewSuppliers")
 @ViewScoped
@@ -36,10 +38,7 @@ public class EditViewSuppliers implements Serializable {
         newSupplier = new Supplier();
     }
 
-    public String viewDetails() {
-
-        return "vistaAparte";
-    }
+ 
 
     public void onRowEdit(RowEditEvent event) {
     }
@@ -94,7 +93,7 @@ public class EditViewSuppliers implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, msj);
             newSupplier = new Supplier();
         } else {
-            FacesMessage msj = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "No sea loco agregue un supplier");
+            FacesMessage msj = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Algo salio mal, no se pudo guardar");
             FacesContext.getCurrentInstance().addMessage(null, msj);
         }
     }

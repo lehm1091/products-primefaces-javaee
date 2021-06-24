@@ -41,7 +41,7 @@ public class SupplierConverter implements Converter {
                 .append(DELIMITER)
                 .append(sup.getCompanyName())
                 .append(DELIMITER)
-                .append(sup.getContacName())
+                .append(sup.getContactName())
                 .append(DELIMITER)
                 .append(sup.getAddress())
                 .append(DELIMITER)

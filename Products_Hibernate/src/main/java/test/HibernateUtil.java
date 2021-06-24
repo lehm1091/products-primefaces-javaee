@@ -35,12 +35,13 @@ public class HibernateUtil {
 
                 // Hibernate settings equivalent to hibernate.cfg.xml's properties
                 Properties settings = new Properties();
-                settings.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
-                settings.put(Environment.URL, "jdbc:mysql://localhost/products?useSSL=false&serverTimezone=UTC");
+                //settings.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver"); 
+                settings.put(Environment.DRIVER, "org.mariadb.jdbc.Driver");
+                settings.put(Environment.URL, "jdbc:mariadb://localhost/northwindjunior?useSSL=false&serverTimezone=UTC");
                 settings.put(Environment.USER, "root");
                 settings.put(Environment.PASS, "root");
-                settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQL8Dialect");
-               settings.put(Environment.HBM2DDL_AUTO, "create-drop");
+                settings.put(Environment.DIALECT, "org.hibernate.dialect.MariaDB10Dialect");
+               //settings.put(Environment.HBM2DDL_AUTO, "create-drop");
 
                 settings.put(Environment.SHOW_SQL, "true");
                 
